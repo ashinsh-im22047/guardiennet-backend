@@ -49,7 +49,7 @@ router.post('/register', async (req, res) => {
     );
 
     // Verification URL
-    const verifyUrl = `${process.env.BACKEND_URL}/api/auth/verify/${token}`;
+    const verifyUrl = `https://guardiennet-backend-i-x-qg.fly.dev//api/auth/verify/${token}`;
 
     const html = `
       <h2>Welcome to GuardianNet</h2>
@@ -82,7 +82,7 @@ router.get('/verify/:token', async (req, res) => {
     // Check if user already verified
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.redirect(`${process.env.FRONTEND_URL}/login?alreadyVerified=true`);
+      return res.redirect(`https://guardiennet-web-app-frontend.vercel.app/login?alreadyVerified=true`);
     }
 
     // Find TemporaryUser data
@@ -105,7 +105,7 @@ router.get('/verify/:token', async (req, res) => {
     await TemporaryUser.deleteOne({ email });
 
     // Redirect with success
-    res.redirect(`${process.env.FRONTEND_URL}/login?verified=true`);
+    res.redirect(`https://guardiennet-web-app-frontend.vercel.app/login?verified=true`);
   } catch (err) {
     console.error("Verification Error:", err);
     res.status(400).send("❌ Invalid or expired link");
@@ -167,7 +167,7 @@ router.post('/forgot-password', async (req, res) => {
     const resetToken = user.generatePasswordResetToken();
     await user.save();
 
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const resetUrl = `https://guardiennet-web-app-frontend.vercel.app/reset-password/${resetToken}`;
 
     const mailOptions = {
       from: `"GuardianNet" <${process.env.GMAIL_USER}>`,
@@ -301,7 +301,7 @@ router.post('/register-admin', async (req, res) => {
       { expiresIn: '15m' }
     );
 
-    const verifyUrl = `${process.env.BACKEND_URL}/api/auth/verify-admin/${token}`;
+    const verifyUrl = `https://guardiennet-backend-i-x-qg.fly.dev/api/auth/verify-admin/${token}`;
 
     const html = `
       <h2>Welcome to GuardianNet Admin Panel</h2>
@@ -336,7 +336,7 @@ router.get('/verify-admin/:token', async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       // Redirect with verified=true to show alert on frontend
-      return res.redirect(`${process.env.FRONTEND_URL}/login?verified=true`);
+      return res.redirect(`https://guardiennet-web-app-frontend.vercel.app/login?verified=true`);
     }
 
     // Get from temporary admin collection
@@ -358,7 +358,7 @@ router.get('/verify-admin/:token', async (req, res) => {
     await TemporaryAdmin.deleteOne({ email });
 
     // Redirect with verified=true to show alert on frontend
-    return res.redirect(`${process.env.FRONTEND_URL}/login?verified=true`);
+    return res.redirect(`https://guardiennet-web-app-frontend.vercel.app/login?verified=true`);
   } catch (err) {
     console.error('Verify Admin Error:', err);
     return res.status(400).send('Invalid or expired token');
